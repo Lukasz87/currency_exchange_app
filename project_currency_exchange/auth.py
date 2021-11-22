@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask_login import login_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from .models import User
 from . import db
@@ -12,7 +13,9 @@ def form(val):
 
 @auth.route('/login', methods=['POST', 'GET'])
 def login():
+    # remember = True if request.form.get('remember') else False
     if request.method == 'GET':
+        # login_user(User, remember=remember)
         return render_template('login.html')
     email = form('email')
     password = form('password')
@@ -20,7 +23,6 @@ def login():
     if not user or not check_password_hash(user.password, password):
         flash('Please check your login details and try again.')
         return redirect(url_for('auth.login'))
-
 
 
 @auth.route('/signup', methods=['POST', 'GET'])

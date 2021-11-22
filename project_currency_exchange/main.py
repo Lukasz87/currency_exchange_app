@@ -1,6 +1,7 @@
 
 from flask import Blueprint, render_template, request
 from . import db
+from . models import User
 
 main = Blueprint('main', __name__)
 
