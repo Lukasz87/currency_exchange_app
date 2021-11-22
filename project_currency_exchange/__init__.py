@@ -1,10 +1,12 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from .auth import auth as auth_blueprint
 from flask_login import LoginManager
 from .main import main as main_blueprint
 from .models import User
 from .db import db
+from flask_migrate import Migrate
+
+migrate = Migrate()
 
 
 class Config(object):
@@ -20,6 +22,7 @@ def create_app():
     app.config.from_object(Config)
 
     db.init_app(app)
+    migrate.init_app(app, db)       # todo migrate
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)

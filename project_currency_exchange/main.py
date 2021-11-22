@@ -1,7 +1,7 @@
 
 from flask import Blueprint, render_template, request
 from .db import db
-from . models import User
+from . models import User, Wallet
 from flask_login import login_required, current_user
 
 main = Blueprint('main', __name__)
@@ -39,3 +39,10 @@ def create_user():
             return 'Error in create user'       # todo refactor
 
         return f"User {username} created"
+
+
+@main.route("/wallet", methods=['POST', 'GET'])
+@login_required
+def wallet():
+    wallet_recs = Wallet.query.filter_by(username=current_user.id)
+    return render_template('wallet.html', wallet=wallet_recs)
