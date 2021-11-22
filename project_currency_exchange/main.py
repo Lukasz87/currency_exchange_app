@@ -1,7 +1,8 @@
 
 from flask import Blueprint, render_template, request
-from . import db
+from .db import db
 from . models import User
+from flask_login import login_required, current_user
 
 main = Blueprint('main', __name__)
 
@@ -13,7 +14,7 @@ def index():
 
 @main.route('/profile')
 def profile():
-    return render_template('profile.html')
+    return render_template('profile.html', user=current_user)
 
 
 def form(name):
