@@ -32,7 +32,7 @@ def form(name):
 @app.route("/signup", methods=['POST', 'GET'])
 def create_user():
     if request.method == 'GET':
-        return render_template('signup.html')
+        return render_template('old_signup.html')
 
     else:
         try:
