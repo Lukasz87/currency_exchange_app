@@ -1,14 +1,26 @@
 from exchange_rates_connector import FreeCurrencyApi
+from flask import Flask, render_template
+from flask_sqlalchemy import SQLAlchemy
 
-# This is a sample Python script.
+# Define the WSGI application object
+app = Flask(__name__)
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+# Configurations
+app.config.from_object('config')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///app_exchange_rate'
+
+# database
+db = SQLAlchemy(app)
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+
+    def __repr__(self):
+        return '<User %r>' % self.username
+
 
 
 # Press the green button in the gutter to run the script.
@@ -17,4 +29,3 @@ if __name__ == '__main__':
     get_rates = rates.get_rates('USD')
     print(get_rates)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
