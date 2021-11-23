@@ -36,4 +36,9 @@ class CurrencyRates(db.Model):
     second_currency = db.Column(db.Integer, db.ForeignKey('currency.id'), nullable=False)
     rate = db.Column(db.Numeric)
 
+    def __init__(self, first_currency, second_currency, rate):
+        self.first_currency = first_currency
+        self.second_currency = second_currency
+        self.rate = rate
+
 

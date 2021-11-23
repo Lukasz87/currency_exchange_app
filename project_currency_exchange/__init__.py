@@ -42,7 +42,7 @@ def create_app():
     return app
 
 
-# @crontab.job(day="1")
-# def cron_price_updater():
-#     pass
+@crontab.job(day="1")
+def cron_price_updater():
+    pass
 

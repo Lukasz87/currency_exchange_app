@@ -2,6 +2,9 @@ import json
 import requests
 from .db import db
 from . models import Currency, CurrencyRates
+from flask_crontab import Crontab
+
+crontab = Crontab()
 
 
 class FreeCurrencyApi:
@@ -26,15 +29,14 @@ class FreeCurrencyApi:
         base_currency = {'base_currency': base_currency}
         return self.get(base_currency)
 
-    def add_rates_to_database(self, rates, currency, currency_id_dict):
-        rates_data = json.loads(rates.content)
-        currency_rate = rates_data.get('data')
+    def add_rates_to_db(self, currency_rate, currency, currency_id_dict):
         if currency_rate and currency in currency_id_dict:
-            add_rates = [(currency_id_dict[currency], currency_id_dict[code], currency_rate[code])
+            rates_obj = [CurrencyRates(currency_id_dict[currency], currency_id_dict[code], currency_rate[code])
                          for code in currency_rate if code in currency_id_dict.keys()]
-            print(add_rates)
-            db.session.add_all(add_rates)
+            db.session.add_all(rates_obj)
+            db.session.commit()
 
+    @crontab.job(day="1")   # run once a day
     def update_rates(self):
         currencies = Currency.query.all()
         currency_id_dict = {currency.code: currency.id for currency in currencies}
@@ -43,6 +45,11 @@ class FreeCurrencyApi:
          if currency.code not in unique_currencies_symbol]
         for currency in unique_currencies_symbol:
             rates = self.get_rates(currency)
-            if rates.ok:
-                self.add_rates_to_database(rates, currency, currency_id_dict)
+            try:
+                rates_data = json.loads(rates.content) if rates.content else False
+            except json.decoder.JSONDecodeError:
+                rates_data = False
+            if rates.ok and rates_data:
+                currency_rate = rates_data.get('data')
+                self.add_rates_to_db(currency_rate, currency, currency_id_dict)
 
