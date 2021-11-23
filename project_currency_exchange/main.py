@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, request
 from .db import db
 from . models import User, Wallet
 from flask_login import login_required, current_user
+from .exchange_rates_connector import FreeCurrencyApi
 
 main = Blueprint('main', __name__)
 
@@ -45,6 +46,8 @@ def create_user():
 @login_required
 def wallet():
     wallet_recs = Wallet.query.filter_by(user_id=current_user.id)
+    api = FreeCurrencyApi()
+    api.update_rates()
     return render_template('wallet.html', wallet=wallet_recs)
 
 

@@ -32,8 +32,8 @@ class Currency(db.Model):
 
 class CurrencyRates(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    first_currency = db.Column(db.String(3), unique=True, nullable=False)
-    second_currency = db.Column(db.String(3), unique=True, nullable=False)
+    first_currency = db.Column(db.Integer, db.ForeignKey('currency.id'), nullable=False)
+    second_currency = db.Column(db.Integer, db.ForeignKey('currency.id'), nullable=False)
     rate = db.Column(db.Numeric)
 
 
