@@ -18,4 +18,4 @@ class Wallet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     currency_code = db.Column(db.String(3), unique=True, nullable=False)
     qty = db.Column(db.Numeric, default=0)
-    username = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)

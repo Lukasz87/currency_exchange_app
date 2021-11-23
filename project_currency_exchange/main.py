@@ -44,5 +44,5 @@ def create_user():
 @main.route("/wallet", methods=['POST', 'GET'])
 @login_required
 def wallet():
-    wallet_recs = Wallet.query.filter_by(username=current_user.id)
+    wallet_recs = Wallet.query.filter_by(user_id=current_user.id)
     return render_template('wallet.html', wallet=wallet_recs)
