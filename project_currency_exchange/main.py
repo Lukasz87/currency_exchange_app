@@ -46,3 +46,5 @@ def create_user():
 def wallet():
     wallet_recs = Wallet.query.filter_by(user_id=current_user.id)
     return render_template('wallet.html', wallet=wallet_recs)
+
+

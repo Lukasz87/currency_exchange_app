@@ -19,3 +19,21 @@ class Wallet(db.Model):
     currency_code = db.Column(db.String(3), unique=True, nullable=False)
     qty = db.Column(db.Numeric, default=0)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+
+class Currency(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    country = db.Column(db.String(100), unique=False, nullable=False)
+    name = db.Column(db.String(100), unique=False, nullable=False)
+    code = db.Column(db.String(3), unique=False, nullable=False)
+    minor_unit = db.Column(db.Integer, nullable=False)
+    symbol = db.Column(db.String(100), unique=False, nullable=True)
+
+
+class CurrencyRates(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    first_currency = db.Column(db.String(3), unique=True, nullable=False)
+    second_currency = db.Column(db.String(3), unique=True, nullable=False)
+    rate = db.Column(db.Numeric)
+
+

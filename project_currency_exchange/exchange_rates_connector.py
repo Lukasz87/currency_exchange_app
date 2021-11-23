@@ -21,3 +21,4 @@ class FreeCurrencyApi:
     def get_rates(self, base_currency):
         base_currency = {'base_currency': base_currency}
         return self.get(base_currency)
+
