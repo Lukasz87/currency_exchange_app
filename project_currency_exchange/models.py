@@ -16,9 +16,14 @@ class User(UserMixin, db.Model):
 
 class Wallet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    currency_code = db.Column(db.String(3), unique=True, nullable=False)
+    currency_code = db.Column(db.Integer, db.ForeignKey('currency.id'), unique=True, nullable=False)
     qty = db.Column(db.Numeric, default=0)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def __init__(self, currency_code, qty, user_id):
+        self.currency_code = currency_code
+        self.qty = qty
+        self.user_id = user_id
 
 
 class Currency(db.Model):

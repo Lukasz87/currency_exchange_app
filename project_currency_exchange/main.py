@@ -1,7 +1,7 @@
 
 from flask import Blueprint, render_template, request
 from .db import db
-from . models import User, Wallet
+from . models import User, Wallet, Currency
 from flask_login import login_required, current_user
 from .exchange_rates_connector import FreeCurrencyApi
 
@@ -45,9 +45,8 @@ def create_user():
 @main.route("/wallet", methods=['POST', 'GET'])
 @login_required
 def wallet():
-    wallet_recs = Wallet.query.filter_by(user_id=current_user.id)
-    api = FreeCurrencyApi()
-    api.update_rates()
-    return render_template('wallet.html', wallet=wallet_recs)
+    wallet_recs = Wallet.query.filter_by(user_id=current_user.id).all()
+    currency_recs = Currency.query.all()
+    return render_template('wallet.html', wallet=wallet_recs, currency=currency_recs )
 
 
